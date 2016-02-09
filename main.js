@@ -1,8 +1,25 @@
 (() => {
   'use strict'
-  class Blackjack {}
 
-  if (typeof module !== 'undefined') {
+  const util = {
+    getSuites () {
+      return ['♠', '♥', '♦', '♣']
+    }
+  }
+
+  class Blackjack {
+    constructor (options) {
+      options = options || {}
+    }
+
+    start () {
+      return this
+    }
+  }
+
+  Blackjack.util = util
+
+  if (typeof module !== 'undefined' && exports !== 'undefined') {
     module.exports = Blackjack
   } else if (typeof window !== 'undefined') {
     window.Blackjack = Blackjack
