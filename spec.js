@@ -30,3 +30,11 @@ test('util.getDeck returns 52 cards', (assert) => {
   assert.equal(deck.length, 52)
   assert.end()
 })
+
+// This test will fail once in a blue moon.
+test('util.shuffle shuffles', (assert) => {
+  const deck = (Array.from(new Array(1000), (_, i) => i))
+  const shuffledDeck = util.shuffle(deck)
+  assert.notDeepEqual(deck, shuffledDeck)
+  assert.end()
+})

@@ -26,6 +26,24 @@
         }))
         return [...acc, ...cardsOfSuite]
       }, [])
+    },
+
+    // Fisher-Yates stolen from the internet.
+    // NB: Returns new array rather than shuffling in-place.
+    shuffle (arr) {
+      const newArr = [...arr]
+      let currentIndex = newArr.length
+
+      while (currentIndex !== 0) {
+        let randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
+
+        let temporaryValue = newArr[currentIndex]
+        newArr[currentIndex] = newArr[randomIndex]
+        newArr[randomIndex] = temporaryValue
+      }
+
+      return newArr
     }
   }
 
