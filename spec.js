@@ -55,3 +55,34 @@ test('util.deckReducer works correctly', (assert) => {
   assert.deepEqual(state2.dealerHand, [2])
   assert.end()
 })
+
+test('util.countHand counts correctly', (assert) => {
+  const hand1 = [
+    { name: 'Ace', value: 11 },
+    { name: 'Ace', value: 11 }
+  ]
+  assert.equal(util.countHand(hand1), 12)
+  const hand2 = [
+    { name: 'Ace', value: 11 },
+    { name: 'King', value: 10 }
+  ]
+  assert.equal(util.countHand(hand2), 21)
+  const hand3 = [
+    { name: 'Ace', value: 11 },
+    { name: 'King', value: 10 },
+    { name: 2, value: 2 }
+  ]
+  assert.equal(util.countHand(hand3), 13)
+  const hand4 = []
+  assert.equal(util.countHand(hand4), 0)
+  const hand5 = [
+    { name: 'Ace', value: 11 },
+    { name: 'Ace', value: 11 },
+    { name: 'Ace', value: 11 },
+    { name: 'Ace', value: 11 },
+    { name: 'King', value: 10 },
+    { name: 2, value: 2 }
+  ]
+  assert.equal(util.countHand(hand5), 16)
+  assert.end()
+})

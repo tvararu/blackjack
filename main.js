@@ -64,6 +64,14 @@
         default:
           return state
       }
+    },
+
+    countHand (hand) {
+      const total = hand.reduce((acc, card) => acc + card.value, 0)
+      const aces = hand.filter(card => card.value === 11)
+      // For every Ace, if we're over 21, reduce the value by 10.
+      const applyAceIfNecessary = (val) => (val > 21) ? val - 10 : val
+      return aces.reduce(applyAceIfNecessary, total)
     }
   }
 
