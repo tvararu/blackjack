@@ -7,7 +7,7 @@
     },
 
     getCardNumbers () {
-      const twoToTen = (Array.from(new Array(9), x => x + 2))
+      const twoToTen = (Array.from(new Array(9), (_, i) => i + 2))
       return [
         { name: 'Ace', value: 11 },
         ...(twoToTen.map(n => ({ name: n, value: n }))),

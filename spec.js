@@ -20,6 +20,9 @@ test('util.getCardNumbers return cards Ace to King', (assert) => {
   const ace = cardNumbers[0]
   assert.equal(ace.name, 'Ace')
   assert.equal(ace.value, 11)
+  const two = cardNumbers[1]
+  assert.equal(two.name, 2)
+  assert.equal(two.value, 2)
   assert.end()
 })
 
