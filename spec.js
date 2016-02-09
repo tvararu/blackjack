@@ -86,3 +86,11 @@ test('util.countHand counts correctly', (assert) => {
   assert.equal(util.countHand(hand5), 16)
   assert.end()
 })
+
+test('util.templatize produces a working template function', (assert) => {
+  const str = 'Hello, {{ thing }}!'
+  const template = util.templatize(str)
+  assert.equal(typeof template, 'function')
+  assert.equal(template({ thing: 'world' }), 'Hello, world!')
+  assert.end()
+})

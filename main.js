@@ -72,12 +72,25 @@
       // For every Ace, if we're over 21, reduce the value by 10.
       const applyAceIfNecessary = (val) => (val > 21) ? val - 10 : val
       return aces.reduce(applyAceIfNecessary, total)
+    },
+
+    templatize (str) {
+      return (options) => {
+        return Object.keys(options).reduce((newStr, variable) => {
+          const findUse = new RegExp(`\\\{\\\{\\\s*${variable}\\\s*\\\}\\\}`, 'g')
+          return newStr.replace(findUse, options[variable])
+        }, str)
+      }
     }
   }
 
   class Blackjack {
     constructor (options) {
       options = options || {}
+      if (options.template && options.domElement) {
+        this.template = document.querySelector(options.template)
+        this.domElement = document.querySelector(options.domElement)
+      }
       const suites = util.getSuites()
       const cardNumbers = util.getCardNumbers()
       const deck = util.shuffle(util.getDeck(suites, cardNumbers))
@@ -88,8 +101,13 @@
       }
     }
 
+    render () {
+      // console.log(this.template, this.domElement)
+      this.domElement.innerHTML = this.template.innerHTML
+    }
+
     start () {
-      return this.state
+      this.render()
     }
   }
 
