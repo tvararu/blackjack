@@ -47,7 +47,7 @@
     },
 
     // (state, action) => (state)
-    deckReducer (state, action) {
+    gameReducer (state, action) {
       switch (action) {
         case 'HIT_PLAYER':
           return {
@@ -95,6 +95,7 @@
       if (options.template && options.domElement) {
         this.template = util.templatize(document.querySelector(options.template).innerHTML)
         this.domElement = document.querySelector(options.domElement)
+        this.domElement.addEventListener('click', this.handleClick.bind(this))
       }
       const suites = util.getSuites()
       const cardNumbers = util.getCardNumbers()
@@ -104,6 +105,25 @@
         playerHand: [],
         dealerHand: []
       }
+    }
+
+    // Poor man's event delegation, rather messy.
+    handleClick (evt) {
+      const tar = evt.target
+      const dataEvent = tar.dataset.event
+      if (dataEvent) {
+        const info = dataEvent.split(':')
+        const type = info[0]
+        if (type === 'click') {
+          const action = info[1]
+          this.triggerAction(action)
+        }
+      }
+    }
+
+    triggerAction (action) {
+      this.state = util.gameReducer(this.state, action)
+      this.render()
     }
 
     render () {
@@ -116,7 +136,10 @@
     }
 
     start () {
-      this.render()
+      this.triggerAction('HIT_PLAYER')
+      this.triggerAction('HIT_DEALER')
+      this.triggerAction('HIT_PLAYER')
+      this.triggerAction('HIT_DEALER')
     }
   }
 

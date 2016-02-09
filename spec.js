@@ -42,17 +42,18 @@ test('util.shuffle shuffles', (assert) => {
   assert.end()
 })
 
-test('util.deckReducer works correctly', (assert) => {
+test('util.gameReducer works correctly', (assert) => {
   const state = {
+    winner: '',
     deck: [1, 2, 3],
     playerHand: [],
     dealerHand: []
   }
-  const state1 = util.deckReducer(state, 'HIT_PLAYER')
+  const state1 = util.gameReducer(state, 'HIT_PLAYER')
   assert.deepEqual(state1.deck, [2, 3])
   assert.deepEqual(state1.playerHand, [1])
   assert.deepEqual(state1.dealerHand, [])
-  const state2 = util.deckReducer(state1, 'HIT_DEALER')
+  const state2 = util.gameReducer(state1, 'HIT_DEALER')
   assert.deepEqual(state2.deck, [3])
   assert.deepEqual(state2.playerHand, [1])
   assert.deepEqual(state2.dealerHand, [2])
