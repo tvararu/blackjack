@@ -44,16 +44,44 @@
       }
 
       return newArr
+    },
+
+    // (state, action) => (state)
+    deckReducer (state, action) {
+      switch (action) {
+        case 'HIT_PLAYER':
+          return {
+            deck: state.deck.slice(1),
+            playerHand: [...state.playerHand, ...state.deck.slice(0, 1)],
+            dealerHand: state.dealerHand
+          }
+        case 'HIT_DEALER':
+          return {
+            deck: state.deck.slice(1),
+            playerHand: state.playerHand,
+            dealerHand: [...state.dealerHand, ...state.deck.slice(0, 1)]
+          }
+        default:
+          return state
+      }
     }
   }
 
   class Blackjack {
     constructor (options) {
       options = options || {}
+      const suites = util.getSuites()
+      const cardNumbers = util.getCardNumbers()
+      const deck = util.shuffle(util.getDeck(suites, cardNumbers))
+      this.state = {
+        deck,
+        playerHand: [],
+        dealerHand: []
+      }
     }
 
     start () {
-      return this
+      return this.state
     }
   }
 
