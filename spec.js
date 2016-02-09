@@ -94,3 +94,13 @@ test('util.templatize produces a working template function', (assert) => {
   assert.equal(template({ thing: 'world' }), 'Hello, world!')
   assert.end()
 })
+
+test('util.prettyPrintHand pretty prints a hand', (assert) => {
+  const hand = [
+    { name: 'Ace', suite: '♠' },
+    { name: 'King', suite: '♥' },
+    { name: 2, suite: '♦' }
+  ]
+  assert.equal(util.prettyPrintHand(hand), '[ Ace ♠, King ♥, 2 ♦ ]')
+  assert.end()
+})

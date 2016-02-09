@@ -78,9 +78,14 @@
       return (options) => {
         return Object.keys(options).reduce((newStr, variable) => {
           const findUse = new RegExp(`\\\{\\\{\\\s*${variable}\\\s*\\\}\\\}`, 'g')
-          return newStr.replace(findUse, options[variable])
+          return newStr.replace(findUse, options[variable].toString())
         }, str)
       }
+    },
+
+    prettyPrintHand (hand) {
+      const handStr = hand.map(card => `${card.name} ${card.suite}`).join(', ')
+      return `[ ${handStr} ]`
     }
   }
 
@@ -88,7 +93,7 @@
     constructor (options) {
       options = options || {}
       if (options.template && options.domElement) {
-        this.template = document.querySelector(options.template)
+        this.template = util.templatize(document.querySelector(options.template).innerHTML)
         this.domElement = document.querySelector(options.domElement)
       }
       const suites = util.getSuites()
@@ -102,8 +107,12 @@
     }
 
     render () {
-      // console.log(this.template, this.domElement)
-      this.domElement.innerHTML = this.template.innerHTML
+      this.domElement.innerHTML = this.template({
+        dealerScore: util.countHand(this.state.dealerHand),
+        playerScore: util.countHand(this.state.playerHand),
+        dealerHand: util.prettyPrintHand(this.state.dealerHand),
+        playerHand: util.prettyPrintHand(this.state.playerHand)
+      })
     }
 
     start () {
