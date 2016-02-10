@@ -109,7 +109,7 @@
             playerScore = util.countHand(newState.playerHand)
             dealerScore = util.countHand(newState.dealerHand)
             if (dealerScore > 21) {
-              return util.gameReducer(newState, 'PLAYER_WINS')
+              return newState
             }
           }
           return util.gameReducer(newState, 'DEALER_WINS')
