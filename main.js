@@ -48,19 +48,75 @@
 
     // (state, action) => (state)
     gameReducer (state, action) {
+      let newHand, newState, playerScore, dealerScore
       switch (action) {
-        case 'HIT_PLAYER':
-          return {
-            deck: state.deck.slice(1),
-            playerHand: [...state.playerHand, ...state.deck.slice(0, 1)],
-            dealerHand: state.dealerHand
+        case 'DEAL':
+          const suites = util.getSuites()
+          const cardNumbers = util.getCardNumbers()
+          const deck = util.shuffle(util.getDeck(suites, cardNumbers))
+          newState = {
+            deck,
+            playerHand: [],
+            dealerHand: [],
+            winner: '',
+            playerWins: state.playerWins || 0,
+            dealerWins: state.dealerWins || 0
           }
+          newState = util.gameReducer(newState, 'HIT_PLAYER')
+          newState = util.gameReducer(newState, 'HIT_DEALER')
+          newState = util.gameReducer(newState, 'HIT_PLAYER')
+          newState = util.gameReducer(newState, 'HIT_DEALER')
+          return newState
+        case 'HIT_PLAYER':
+          if (state.winner) { return state }
+          newHand = [...state.playerHand, ...state.deck.slice(0, 1)]
+          newState = Object.assign({}, state, {
+            deck: state.deck.slice(1),
+            playerHand: newHand,
+            dealerHand: state.dealerHand
+          })
+          const playerIsBust = util.countHand(newHand) > 21
+          if (playerIsBust) {
+            return util.gameReducer(newState, 'DEALER_WINS')
+          }
+          return newState
         case 'HIT_DEALER':
-          return {
+          if (state.winner) { return state }
+          newHand = [...state.dealerHand, ...state.deck.slice(0, 1)]
+          newState = Object.assign({}, state, {
             deck: state.deck.slice(1),
             playerHand: state.playerHand,
-            dealerHand: [...state.dealerHand, ...state.deck.slice(0, 1)]
+            dealerHand: newHand
+          })
+          const dealerIsBust = util.countHand(newHand) > 21
+          if (dealerIsBust) {
+            return util.gameReducer(newState, 'PLAYER_WINS')
           }
+          return newState
+        case 'STICK':
+          if (state.winner) { return state }
+          playerScore = util.countHand(state.playerHand)
+          dealerScore = util.countHand(state.dealerHand)
+          newState = state
+          while (playerScore <= 21 && dealerScore < playerScore) {
+            newState = util.gameReducer(newState, 'HIT_DEALER')
+            playerScore = util.countHand(newState.playerHand)
+            dealerScore = util.countHand(newState.dealerHand)
+            if (dealerScore > 21) {
+              return util.gameReducer(newState, 'PLAYER_WINS')
+            }
+          }
+          return util.gameReducer(newState, 'DEALER_WINS')
+        case 'PLAYER_WINS':
+          return Object.assign({}, state, {
+            winner: 'Player',
+            playerWins: state.playerWins + 1
+          })
+        case 'DEALER_WINS':
+          return Object.assign({}, state, {
+            winner: 'Dealer',
+            dealerWins: state.dealerWins + 1
+          })
         default:
           return state
       }
@@ -97,14 +153,7 @@
         this.domElement = document.querySelector(options.domElement)
         this.domElement.addEventListener('click', this.handleClick.bind(this))
       }
-      const suites = util.getSuites()
-      const cardNumbers = util.getCardNumbers()
-      const deck = util.shuffle(util.getDeck(suites, cardNumbers))
-      this.state = {
-        deck,
-        playerHand: [],
-        dealerHand: []
-      }
+      this.state = util.gameReducer({}, 'DEAL')
     }
 
     // Poor man's event delegation, rather messy.
@@ -126,20 +175,22 @@
       this.render()
     }
 
+    start () {
+      this.render()
+    }
+
     render () {
       this.domElement.innerHTML = this.template({
         dealerScore: util.countHand(this.state.dealerHand),
         playerScore: util.countHand(this.state.playerHand),
         dealerHand: util.prettyPrintHand(this.state.dealerHand),
-        playerHand: util.prettyPrintHand(this.state.playerHand)
+        playerHand: util.prettyPrintHand(this.state.playerHand),
+        verdict: (this.state.winner === '')
+          ? ''
+          : `${this.state.winner} wins!`,
+        dealerWins: this.state.dealerWins,
+        playerWins: this.state.playerWins
       })
-    }
-
-    start () {
-      this.triggerAction('HIT_PLAYER')
-      this.triggerAction('HIT_DEALER')
-      this.triggerAction('HIT_PLAYER')
-      this.triggerAction('HIT_DEALER')
     }
   }
 

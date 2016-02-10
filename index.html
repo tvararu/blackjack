@@ -8,10 +8,14 @@
     <div id="root"></div>
     <script type="template/blackjack" id="blackjack-template">
       <h1>Blackjack</h1>
+      <p>Wins: Dealer <strong>{{ dealerWins }}</strong> - Player <strong>{{ playerWins }}</strong></p>
       <p>Dealer hand (Score: {{ dealerScore }}): {{ dealerHand }}</p>
       <p>Your hand (Score: {{ playerScore }}): {{ playerHand }}</p>
+      <p>Use the buttons below. <strong>{{ verdict }}</strong></p>
+      <hr />
       <button data-event="click:HIT_PLAYER">Hit</button>
       <button data-event="click:STICK">Stick</button>
+      <button data-event="click:DEAL">Deal</button>
     </script>
     <script src="main.js" charset="utf-8"></script>
     <script>
