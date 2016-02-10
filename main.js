@@ -161,6 +161,15 @@
         this.template = util.templatize(document.querySelector(options.template).innerHTML)
         this.domElement = document.querySelector(options.domElement)
         this.domElement.addEventListener('click', this.handleClick.bind(this))
+        window.addEventListener('keypress', (evt) => {
+          const key = String.fromCharCode(evt.keyCode).toUpperCase()
+          switch (key) {
+            case 'H': this.triggerAction('HIT_PLAYER'); break
+            case 'S': this.triggerAction('STICK'); break
+            case 'D': this.triggerAction('DEAL'); break
+            case 'R': this.triggerAction('RESET'); break
+          }
+        })
       }
       this.state = util.gameReducer({}, 'DEAL')
     }
