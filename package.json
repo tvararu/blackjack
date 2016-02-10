@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tape spec.js | faucet"
+    "deploy": "surge -p . -d blackjack-es6.surge.sh",
+    "test": "standard && tape spec.js | faucet"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "standard": "^6.0.4",
+    "surge": "^0.17.7",
     "tape": "^4.4.0"
   }
 }

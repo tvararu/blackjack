@@ -1,14 +1,19 @@
-Blackjack test
+Blackjack
 ===
 
-Total time spent: ~3.5-4 hours. You can step through the commit log to see how it was built.
+A very basic game of Blackjack, part of an interview test, implemented using just plain ES6 and some TDD. Probably only runs on Chrome/Firefox.
+
+Probably has bugs. Relies a lot on pure functions, and the main state machine is described using a [redux](https://github.com/rackt/redux)-like reducer.
 
 Testing
 ===
-
-Most core behaviour was TDDed. To run the tests, make sure you're running a new-ish version of node (v4+ should work), and do:
 
 ```
 npm i
 npm test
 ```
+
+License
+===
+
+MIT.
