@@ -148,8 +148,10 @@
       }
     },
 
-    prettyPrintHand (hand) {
-      const handStr = hand.map(card => `${card.name} ${card.suite}`).join(', ')
+    prettyPrintHand (hand, hideCards) {
+      const handStr = hand.map((card, idx) =>
+        (hideCards && idx > 0) ? '???' : `${card.name} ${card.suite}`
+      ).join(', ')
       return `[ ${handStr} ]`
     }
   }
@@ -199,9 +201,13 @@
 
     render () {
       this.domElement.innerHTML = this.template({
-        dealerScore: util.countHand(this.state.dealerHand),
+        dealerScore: (this.state.winner === '')
+          ? util.countHand(this.state.dealerHand.slice(0, 1)) + ' + ?'
+          : util.countHand(this.state.dealerHand),
         playerScore: util.countHand(this.state.playerHand),
-        dealerHand: util.prettyPrintHand(this.state.dealerHand),
+        dealerHand: (this.state.winner === '')
+          ? util.prettyPrintHand(this.state.dealerHand, true)
+          : util.prettyPrintHand(this.state.dealerHand),
         playerHand: util.prettyPrintHand(this.state.playerHand),
         verdict: (this.state.winner === '')
           ? ''
