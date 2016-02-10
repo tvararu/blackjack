@@ -67,6 +67,10 @@
           newState = util.gameReducer(newState, 'HIT_PLAYER')
           newState = util.gameReducer(newState, 'HIT_DEALER')
           return newState
+
+        case 'RESET':
+          return util.gameReducer({}, 'DEAL')
+
         case 'HIT_PLAYER':
           if (state.winner) { return state }
           newHand = [...state.playerHand, ...state.deck.slice(0, 1)]
@@ -80,6 +84,7 @@
             return util.gameReducer(newState, 'DEALER_WINS')
           }
           return newState
+
         case 'HIT_DEALER':
           if (state.winner) { return state }
           newHand = [...state.dealerHand, ...state.deck.slice(0, 1)]
@@ -93,6 +98,7 @@
             return util.gameReducer(newState, 'PLAYER_WINS')
           }
           return newState
+
         case 'STICK':
           if (state.winner) { return state }
           playerScore = util.countHand(state.playerHand)
@@ -107,16 +113,19 @@
             }
           }
           return util.gameReducer(newState, 'DEALER_WINS')
+
         case 'PLAYER_WINS':
           return Object.assign({}, state, {
             winner: 'Player',
             playerWins: state.playerWins + 1
           })
+
         case 'DEALER_WINS':
           return Object.assign({}, state, {
             winner: 'Dealer',
             dealerWins: state.dealerWins + 1
           })
+
         default:
           return state
       }
