@@ -220,7 +220,7 @@
 
   Blackjack.util = util
 
-  if (typeof module !== 'undefined' && exports !== 'undefined') {
+  if (typeof module !== 'undefined' && typeof exports !== 'undefined') {
     module.exports = Blackjack
   } else if (typeof window !== 'undefined') {
     window.Blackjack = Blackjack
